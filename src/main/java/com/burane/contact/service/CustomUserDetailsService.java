@@ -40,11 +40,15 @@ public class CustomUserDetailsService implements UserDetailsService {
 		return grantedAuthorities;
 	}
 
-	public User findByUsername(String username) {
-		return userRepository.findByUsername(username).orElseThrow();
+	public User findByUsername(String username) throws NoSuchElementException {
+		return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
 	}
 
-	public Role findByRole(ERole role) {
+	public boolean existsByUsername(String username) {
+		return userRepository.existsByUsername(username);
+	}
+
+	public Role findByRole(ERole role) throws UsernameNotFoundException {
 		return roleRepository.findByRole(role).orElseThrow();
 	}
 
@@ -57,8 +61,4 @@ public class CustomUserDetailsService implements UserDetailsService {
 		userRepository.save(user);
 	}
 
-	@Bean
-	public BCryptPasswordEncoder bCryptPasswordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
 }
