@@ -21,7 +21,7 @@ public class DashboardController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findByUsername(auth.getName());
 		modelAndView.addObject("currentUser", user);
-		modelAndView.addObject("fullName", "Welcome " + user.getUsername());
+		modelAndView.addObject("username", "Welcome " + user.getUsername());
 		modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
 		modelAndView.setViewName("dashboard");
 		return modelAndView;
