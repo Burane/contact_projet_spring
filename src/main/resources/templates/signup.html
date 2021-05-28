@@ -4,26 +4,30 @@
 <head>
     <title>Signup</title>
 </head>
-<body>
+<body class="text-center">
 <div layout:fragment="content">
-    <form class="form-signing" th:action="@{/signup}" method="post">
-        <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72" />
-        <h1 class="h3 mb-3 font-weight-normal">Signup Here</h1>
-        <div th:if="${param.error}">
-            Invalid username and password.
-        </div>
-        <div th:if="${param.logout}">
-            You have been logged out.
-        </div>
-        <label for="inputUsername" class="sr-only">Username</label>
-        <input type="text" name="username" id="inputUsername" class="form-control" placeholder="Username" required="" />
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required="" />
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
-    </form>
-    <form class="form-signin" th:action="@{/login}" method="get">
-        <button class="btn btn-md btn-success btn-block" type="Submit">Sign In</button>
-    </form>
+    <main class="form-signin">
+        <form th:action="@{/signup}" method="post">
+            <img class="mb-4" src="images/logo.png" alt="" width="72" height="72">
+            <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
+            <div class="form-floating">
+                <input type="text" name="username" class="form-control" id="floatingInput" placeholder="Username">
+                <label for="floatingInput">Username</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password">
+                <label for="floatingPassword">Password</label>
+            </div>
+
+            <div class="checkbox mb-3">
+                <label>
+                    <a th:href="@{/signin}" method="get">Already have an account ?</a>
+                </label>
+            </div>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Sign Up</button>
+            <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
+        </form>
+    </main>
 </div>
 </body>
 </html>

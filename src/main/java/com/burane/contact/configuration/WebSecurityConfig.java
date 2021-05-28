@@ -18,6 +18,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
 	@Autowired CustomUserDetailsService userDetailsService;
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -30,17 +31,34 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/").permitAll().antMatchers("/login").permitAll().antMatchers("/signup")
-				.permitAll().antMatchers("/contact/**").hasAuthority(ERole.User.name()).anyRequest().authenticated().and().csrf()
-				.disable().formLogin().successHandler(customizeAuthenticationSuccessHandler).loginPage("/login")
-				.failureUrl("/login?error=true").usernameParameter("username").passwordParameter("password").and()
-				.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/").and()
+		http.authorizeRequests().antMatchers("/").permitAll()
+				.antMatchers("/login").permitAll()
+				.antMatchers("/signup").permitAll()
+				.antMatchers("/dashboard/**").hasAuthority(ERole.User.name())
+				.anyRequest().authenticated()
+
+				.and().csrf().disable()
+				.formLogin()
+				.successHandler(customizeAuthenticationSuccessHandler)
+				.loginPage("/login")
+				.failureUrl("/login?error=true")
+				.usernameParameter("username")
+				.passwordParameter("password")
+				.and()
+				.logout()
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				.logoutSuccessUrl("/")
+				.deleteCookies("JSESSIONID")
+				.and()
+				.rememberMe().key("#bR8&#Z4G!S6&5j")
+				.rememberMeParameter("remember-me")
+				.and()
 				.exceptionHandling();
 	}
 
 	@Override
 	public void configure(WebSecurity web) {
-		web.ignoring().antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
+		web.ignoring().antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "/bootstrap/**");
 	}
 
 	@Bean
