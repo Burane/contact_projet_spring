@@ -1,18 +1,25 @@
 package com.burane.contact.configuration;
 
+import com.burane.contact.configuration.jwt.JwtConfigurer;
+import com.burane.contact.configuration.jwt.JwtTokenProvider;
 import com.burane.contact.model.ERole;
 import com.burane.contact.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
@@ -21,8 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired CustomUserDetailsService userDetailsService;
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-	@Autowired CustomizeAuthenticationSuccessHandler customizeAuthenticationSuccessHandler;
+	@Autowired JwtTokenProvider jwtTokenProvider;
 
 	@Override
 	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -31,29 +37,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/").permitAll()
-				.antMatchers("/login").permitAll()
-				.antMatchers("/signup").permitAll()
-				.antMatchers("/dashboard/**").hasAuthority(ERole.User.name())
-				.anyRequest().authenticated()
-
-				.and().csrf().disable()
-				.formLogin()
-				.successHandler(customizeAuthenticationSuccessHandler)
-				.loginPage("/login")
-				.failureUrl("/login?error=true")
-				.usernameParameter("username")
-				.passwordParameter("password")
+		http.httpBasic().disable().csrf().disable().sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
-				.logout()
-				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-				.logoutSuccessUrl("/")
-				.deleteCookies("JSESSIONID")
+				.authorizeRequests()
+				.antMatchers("/api/auth/login").permitAll()
+				.antMatchers("/api/auth/register").permitAll()
+				.antMatchers("/api/contacts/**").hasAuthority(ERole.User.name()).anyRequest().authenticated().
+				and()
+				.csrf().disable()
+				.exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint())
 				.and()
-				.rememberMe().key("#bR8&#Z4G!S6&5j")
-				.rememberMeParameter("remember-me")
-				.and()
-				.exceptionHandling();
+				.apply(new JwtConfigurer(jwtTokenProvider));
 	}
 
 	@Override
@@ -64,6 +59,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public AuthenticationEntryPoint unauthorizedEntryPoint() {
+		return (request, response, authException) -> response
+				.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+	}
+
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
 	}
 
 }

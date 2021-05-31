@@ -3,49 +3,35 @@ package com.burane.contact.controller;
 import com.burane.contact.model.User;
 import com.burane.contact.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
-@Controller
+@RestController
+@RequestMapping("/api/auth")
 public class RegisterController {
 
 	@Autowired private CustomUserDetailsService userService;
 
-	@RequestMapping(value = "/signup", method = RequestMethod.GET)
-	public ModelAndView signup() {
-		ModelAndView modelAndView = new ModelAndView();
-		User user = new User();
-		modelAndView.addObject("user", user);
-		modelAndView.setViewName("signup");
-		return modelAndView;
-	}
-
-	@RequestMapping(value = "/signup", method = RequestMethod.POST)
-	public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
-
-		System.out.println(user);
-		System.out.println(bindingResult);
-
-		ModelAndView modelAndView = new ModelAndView();
+	@PostMapping("/register")
+	public ResponseEntity<Map<String, String>> register(@RequestBody @Valid User user) {
 		boolean userExists = userService.existsByUsername(user.getUsername());
-		if (userExists) {
-			bindingResult.rejectValue("username", "error.user",
-					"There is already a user registered with the username provided");
-		}
-		if (bindingResult.hasErrors()) {
-			modelAndView.setViewName("signup");
-		} else {
-			userService.saveUser(user);
-			modelAndView.addObject("successMessage", "User has been registered successfully");
-			modelAndView.addObject("user", new User());
-			modelAndView.setViewName("login");
 
-		}
-		return modelAndView;
+		if (userExists)
+			throw new BadCredentialsException("User with username: " + user.getUsername() + " already exists");
+
+		userService.saveUser(user);
+		Map<String, String> model = new HashMap<>();
+		model.put("message", "User registered successfully");
+
+		return ResponseEntity.ok(model);
 	}
+
 }
