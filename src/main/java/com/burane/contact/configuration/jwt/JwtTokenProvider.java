@@ -3,9 +3,9 @@ package com.burane.contact.configuration.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.Claim;
 import com.burane.contact.model.Role;
 import com.burane.contact.service.CustomUserDetailsService;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,9 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
+@Data
 @Component
 public class JwtTokenProvider {
 
@@ -28,16 +28,16 @@ public class JwtTokenProvider {
 
 	@Value("${contact.app.jwtExpirationMs}") private long jwtExpirationMs;
 
-	@Autowired private CustomUserDetailsService customUserDetailsService;
+	@Autowired private final CustomUserDetailsService customUserDetailsService;
 
 	@PostConstruct
 	protected void init() {
 		jwtSecret = Base64.getEncoder().encodeToString(jwtSecret.getBytes());
 	}
 
-	public String createToken(String username, Set<Role> set) {
+	public String createToken(String username, List<Role> list) {
 		Instant now = Instant.now();
-		return JWT.create().withSubject(username).withClaim("roles", set.stream().map(Role::toString).toList())
+		return JWT.create().withSubject(username).withClaim("roles", list.stream().map(Role::toString).toList())
 				.withExpiresAt(Date.from(now.plusMillis(jwtExpirationMs))).withIssuedAt(Date.from(now))
 				.sign(Algorithm.HMAC256(jwtSecret));
 	}

@@ -3,26 +3,25 @@ package com.burane.contact.model;
 import lombok.Data;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 @Data
-@Document(collection = "user")
-public class User {
+@Document(collection = "address")
+public class Address {
 
 	@Id private ObjectId _id;
 
-	@NotBlank
-	@Size(max = 50)
-	private String username;
+	@NotBlank private int postalCode;
 
 	@NotBlank
 	@Size(max = 50)
-	private String password;
+	private String city;
 
-	@DBRef private List<Role> roles;
+	@NotBlank
+	@Size(max = 50)
+	private String rue;
+
 }

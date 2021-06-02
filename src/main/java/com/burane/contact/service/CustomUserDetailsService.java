@@ -6,7 +6,6 @@ import com.burane.contact.model.User;
 import com.burane.contact.repository.RoleRepository;
 import com.burane.contact.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +14,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -34,7 +36,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 				authorities);
 	}
 
-	private List<GrantedAuthority> getUserAuthority(Set<Role> userRoles) {
+	private List<GrantedAuthority> getUserAuthority(List<Role> userRoles) {
 		List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 		userRoles.forEach(role -> grantedAuthorities.add(new SimpleGrantedAuthority(role.getRole().name())));
 		return grantedAuthorities;
@@ -55,7 +57,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	public void saveUser(User user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		Role userRole = findByRole(ERole.User);
-		user.setRoles(new HashSet<>() {{
+		user.setRoles(new ArrayList<>() {{
 			add(userRole);
 		}});
 		userRepository.save(user);
