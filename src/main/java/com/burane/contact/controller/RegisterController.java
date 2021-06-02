@@ -24,13 +24,14 @@ public class RegisterController {
 	public ResponseEntity<Map<String, String>> register(@RequestBody @Valid User user) {
 		boolean userExists = userService.existsByUsername(user.getUsername());
 
-		if (userExists)
-			throw new BadCredentialsException("User with username: " + user.getUsername() + " already exists");
+		Map<String, String> model = new HashMap<>();
+		if (userExists) {
+			model.put("message", "User with username : " + user.getUsername() + " already exists");
+			return ResponseEntity.badRequest().body(model);
+		}
 
 		userService.saveUser(user);
-		Map<String, String> model = new HashMap<>();
 		model.put("message", "User registered successfully");
-
 		return ResponseEntity.ok(model);
 	}
 

@@ -7,6 +7,8 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -17,10 +19,14 @@ public class User {
 	@Id private ObjectId _id;
 
 	@NotBlank
+	@NotEmpty
+	@NotNull
 	@Size(max = 50)
 	private String username;
 
 	@NotBlank
+	@NotEmpty
+	@NotNull
 	@Size(max = 50)
 	private String password;
 

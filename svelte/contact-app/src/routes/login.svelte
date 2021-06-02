@@ -7,6 +7,11 @@
         <form on:submit|preventDefault={submit}>
             <img class="mb-4" src="images/logo.png" alt="" width="72" height="72">
             <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+            {#if error}
+                <div>
+                    {message}
+                </div>
+            {/if}
 
             <div class="form-floating">
                 <input bind:value={username} type="text" name="username" class="form-control" id="username"
@@ -21,7 +26,7 @@
 
             <div class="checkbox mb-3">
                 <label>
-                    <a href="register" method="get">Dont have an account yet ?</a>
+                    <a href="register">Dont have an account yet ?</a>
                 </label>
             </div>
             <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
@@ -31,9 +36,12 @@
 </div>
 
 <script lang="ts">
+    import { goto } from '$app/navigation';
 
     let username: String
     let password: String
+    let error: boolean = false
+    let message: String
 
     const submit = async () => {
         console.log(username, password)
@@ -47,7 +55,15 @@
                 password
             })
         })
-        console.log("status",res.status)
+
+        if (res.status == 200) {
+            await goto('/')
+        } else {
+            error = true;
+            const json = await res.json()
+            message = json?.message
+        }
+
     }
 </script>
 

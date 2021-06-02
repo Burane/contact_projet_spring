@@ -17,7 +17,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,9 +25,9 @@ import javax.servlet.http.HttpServletResponse;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired CustomUserDetailsService userDetailsService;
+	@Autowired private CustomUserDetailsService userDetailsService;
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired JwtTokenProvider jwtTokenProvider;
+	@Autowired private JwtTokenProvider jwtTokenProvider;
 
 	@Override
 	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
