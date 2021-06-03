@@ -23,8 +23,18 @@ public class RegisterController {
 	@PostMapping("/register")
 	public ResponseEntity<Map<String, String>> register(@RequestBody @Valid User user) {
 		boolean userExists = userService.existsByUsername(user.getUsername());
-
 		Map<String, String> model = new HashMap<>();
+
+		if (user.getUsername().isBlank()) {
+			model.put("message", "Username canot be blank");
+			return ResponseEntity.badRequest().body(model);
+		}
+
+		if (user.getPassword().isBlank()) {
+			model.put("message", "Password canot be blank");
+			return ResponseEntity.badRequest().body(model);
+		}
+
 		if (userExists) {
 			model.put("message", "User with username : " + user.getUsername() + " already exists");
 			return ResponseEntity.badRequest().body(model);

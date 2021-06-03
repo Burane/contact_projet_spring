@@ -22,6 +22,6 @@ public class Address {
 
 	@NotBlank
 	@Size(max = 50)
-	private String rue;
+	private String street;
 
 }

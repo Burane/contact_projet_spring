@@ -30,7 +30,7 @@ public class LoginController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody @Valid AuthBody data) {
+	public ResponseEntity<?> login(@Valid @RequestBody AuthBody data) {
 		Map<String, String> model = new HashMap<>();
 		try {
 			String username = data.username;

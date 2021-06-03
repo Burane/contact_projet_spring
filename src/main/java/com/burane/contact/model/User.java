@@ -31,4 +31,6 @@ public class User {
 	private String password;
 
 	@DBRef private List<Role> roles;
+
+//	@DBRef private List<Contact> contacts;
 }
