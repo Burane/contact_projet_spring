@@ -1,19 +1,17 @@
 package com.burane.contact.service;
 
-import com.burane.contact.model.*;
-import com.burane.contact.repository.*;
+import com.burane.contact.Exception.EmailAlreadyExistException;
+import com.burane.contact.model.Contact;
+import com.burane.contact.model.Email;
+import com.burane.contact.model.User;
+import com.burane.contact.repository.AddressRepository;
+import com.burane.contact.repository.ContactRepository;
+import com.burane.contact.repository.EmailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class CustomUserContactsService {
@@ -39,9 +37,11 @@ public class CustomUserContactsService {
 			contactRepository.delete(toDelete);
 	}
 
-	public void saveOrUpdateContact(Contact contact, String username) {
+	public void saveOrUpdateContact(Contact contact, String username) throws EmailAlreadyExistException {
 		User user = userDetailsService.findByUsername(username);
 		contact.setUser(user);
+		if (contact.getEmails().stream().anyMatch(email -> emailRepository.existsByEmail(email.getEmail())))
+			throw new EmailAlreadyExistException("An email is already taken");
 		emailRepository.saveAll(contact.getEmails());
 		addressRepository.saveAll(contact.getAddress());
 		contactRepository.save(contact);

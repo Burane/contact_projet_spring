@@ -17,6 +17,6 @@ public class Email {
 
 	@NotBlank
 	@Size(max = 50)
-	@Indexed(unique = true)
+	@Indexed(name = "email_index_unique", unique = true)
 	private String email;
 }

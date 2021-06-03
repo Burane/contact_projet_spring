@@ -1,5 +1,6 @@
 package com.burane.contact.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -14,7 +15,9 @@ public class Contact {
 
 	@Id private ObjectId _id;
 
-	@DBRef private User user;
+	@JsonIgnore
+	@DBRef
+	private User user;
 
 	@DBRef private List<Address> address;
 
