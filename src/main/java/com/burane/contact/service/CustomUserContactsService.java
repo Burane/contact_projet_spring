@@ -7,11 +7,13 @@ import com.burane.contact.model.User;
 import com.burane.contact.repository.AddressRepository;
 import com.burane.contact.repository.ContactRepository;
 import com.burane.contact.repository.EmailRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class CustomUserContactsService {
@@ -30,15 +32,24 @@ public class CustomUserContactsService {
 		return contactRepository.findByEmails(emails);
 	}
 
+	public Contact findById(ObjectId id) {
+		return contactRepository.findById(id.toString())
+				.orElseThrow(() -> new NoSuchElementException("Contact not found"));
+	}
+
 	public void deleteContact(Contact contact, String username) {
 		User user = userDetailsService.findByUsername(username);
-		Contact toDelete = findByEmails(contact.getEmails());
-		if (user.getUsername().equals(username))
+		Contact toDelete = findById(contact.get_id());
+		if (user.getUsername().equals(username)) {
+			emailRepository.deleteAll(contact.getEmails());
+			addressRepository.deleteAll(contact.getAddress());
 			contactRepository.delete(toDelete);
+		}
 	}
 
 	public void saveOrUpdateContact(Contact contact, String username) throws EmailAlreadyExistException {
 		User user = userDetailsService.findByUsername(username);
+		System.out.println(contact);
 		contact.setUser(user);
 		if (contact.getEmails().stream().anyMatch(email -> emailRepository.existsByEmail(email.getEmail())))
 			throw new EmailAlreadyExistException("An email is already taken");

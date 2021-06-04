@@ -1,5 +1,7 @@
 package com.burane.contact.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -16,6 +18,7 @@ import java.util.List;
 @Document(collection = "user")
 public class User {
 
+	@JsonSerialize(using = ToStringSerializer.class)
 	@Id private ObjectId _id;
 
 	@NotBlank
