@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -41,20 +42,25 @@ public class CustomUserContactsService {
 		User user = userDetailsService.findByUsername(username);
 		Contact toDelete = findById(contact.get_id());
 		if (user.getUsername().equals(username)) {
-			emailRepository.deleteAll(contact.getEmails());
-			addressRepository.deleteAll(contact.getAddress());
+			emailRepository.deleteAll(toDelete.getEmails());
+			addressRepository.deleteAll(toDelete.getAddress());
 			contactRepository.delete(toDelete);
 		}
 	}
 
 	public void saveOrUpdateContact(Contact contact, String username) throws EmailAlreadyExistException {
 		User user = userDetailsService.findByUsername(username);
-		System.out.println(contact);
 		contact.setUser(user);
 		if (contact.getEmails().stream().anyMatch(email -> emailRepository.existsByEmail(email.getEmail())))
 			throw new EmailAlreadyExistException("An email is already taken");
 		emailRepository.saveAll(contact.getEmails());
 		addressRepository.saveAll(contact.getAddress());
 		contactRepository.save(contact);
+	}
+
+	public void updateContact(Contact contact, String username) throws EmailAlreadyExistException {
+		Contact toModify = findById(contact.get_id());
+		System.out.println(toModify);
+		saveOrUpdateContact(toModify, username);
 	}
 }

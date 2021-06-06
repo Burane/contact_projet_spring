@@ -1,7 +1,8 @@
 package com.burane.contact.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.burane.contact.annotation.CascadeSave;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
@@ -19,14 +20,20 @@ import java.util.List;
 public class Contact {
 
 	@JsonSerialize(using = ToStringSerializer.class)
-	@Id private ObjectId _id;
+	@JsonDeserialize()
+	@Id
+	private ObjectId _id;
 
 	@JsonIgnore
 	@DBRef
 	private User user;
 
-	@DBRef private List<Address> address;
+	@DBRef
+	@CascadeSave
+	private List<Address> address;
 
-	@DBRef private List<Email> emails;
+	@DBRef
+	@CascadeSave
+	private List<Email> emails;
 
 }
