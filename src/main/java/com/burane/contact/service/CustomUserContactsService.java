@@ -9,10 +9,8 @@ import com.burane.contact.repository.ContactRepository;
 import com.burane.contact.repository.EmailRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -56,11 +54,5 @@ public class CustomUserContactsService {
 		emailRepository.saveAll(contact.getEmails());
 		addressRepository.saveAll(contact.getAddress());
 		contactRepository.save(contact);
-	}
-
-	public void updateContact(Contact contact, String username) throws EmailAlreadyExistException {
-		Contact toModify = findById(contact.get_id());
-		System.out.println(toModify);
-		saveOrUpdateContact(toModify, username);
 	}
 }

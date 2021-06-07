@@ -36,12 +36,16 @@
 </div>
 
 <script lang="ts">
-    import { goto } from '$app/navigation';
+    import {goto} from '$app/navigation';
+    import authStore from '/src/stores/userAuth'
+    import Auth from "../objects/Auth";
+    import {Deserialize} from 'cerialize';
 
-    let username: String
-    let password: String
+    let username: string
+    let password: string
     let error: boolean = false
-    let message: String
+    let message: string
+
 
     const submit = async () => {
         console.log(username, password)
@@ -57,7 +61,14 @@
         })
 
         if (res.status == 200) {
-            await goto('/')
+            const json = await res.json()
+            let auth: Auth = Deserialize(json, Auth);
+
+            authStore.update(curr => {
+                return auth;
+            })
+
+            await goto('/dashboard')
         } else {
             error = true;
             const json = await res.json()

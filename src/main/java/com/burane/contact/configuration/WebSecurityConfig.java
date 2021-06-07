@@ -43,7 +43,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/auth/login").permitAll()
 				.antMatchers("/api/auth/register").permitAll()
 				.antMatchers("/api/contact/**").hasAuthority(ERole.User.name()).anyRequest().authenticated()
-//				.antMatchers("/api/contact/**").permitAll()
 				.and()
 				.csrf().disable()
 				.exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint())
