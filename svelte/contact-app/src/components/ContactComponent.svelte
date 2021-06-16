@@ -1,4 +1,5 @@
 <Card>
+    <br><br>
     <div class="contact">
         {contact._id}
     </div>
@@ -12,26 +13,20 @@
 
     {#if contact.address}
         {#each contact.address as adr }
-            <p>
-                {adr.street}
-                {adr.postalCode}
-                {adr.city}
-            </p>
+            <div class="card-header">
+                Informations
+            </div>
+            <ul class="list-group list-group-flush" id="dataContact">
+                <label>Rue : </label>
+                <li class="list-group-item">{adr.street}</li>
+                <label>Code Postal : </label>
+                <li class="list-group-item">{adr.postalCode}</li>
+                <label>Ville : </label>
+                <li class="list-group-item">{adr.city}</li>
+            </ul>
+
         {/each}
     {/if}
-
-
-    <div class="card" style="width: 18rem;">
-        <div class="card-header">
-            Informations
-        </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">An item</li>
-            <li class="list-group-item">A second item</li>
-            <li class="list-group-item">A third item</li>
-        </ul>
-    </div>
-
 
 </Card>
 
@@ -40,3 +35,14 @@
     export let contact;
     console.log(contact);
 </script>
+
+<style>
+    #dataContact{
+        display: inline;
+    }
+
+    label{
+        font-weight: bold;
+    }
+
+</style>
