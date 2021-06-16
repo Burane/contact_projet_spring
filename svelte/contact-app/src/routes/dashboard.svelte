@@ -8,7 +8,7 @@
 <div class="contact-list">
     {#each $contactStore as contact (contact._id)}
         <div>
-            <ContactComponent {contact}/>
+            <ContactComponent contact={contact}/>
         </div>
     {/each}
 </div>
@@ -33,6 +33,7 @@
         });
         const json = await res.json();
         let contact: Contact = Deserialize(json, Contact)
+        console.log(contact)
         contactStore.update(curr => {
             return [curr, ...contact];
         })

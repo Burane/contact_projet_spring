@@ -2,22 +2,34 @@ import {deserialize} from 'cerialize';
 
 class Auth {
 
+    @deserialize username: string;
+    @deserialize token: string;
+
     constructor(username: string, token : string ) {
         this.username = username;
         this.token = token;
         this.setAuthCookie();
+        console.log(username,token)
     }
 
-    setAuthCookie() {
+
+    public setAuthCookie() {
         document.cookie = `token=${this.token}; path="/"`;
         document.cookie = `username=${this.username}; path="/"`;
     }
 
-    getAuthCookie() {
-
+    public static getAuthCookie() {
+        let tmpusername : string = this.getCookie('username')
+        let tmptoken : string = this.getCookie('token')
+        console.log("get cookie")
+        console.log(tmpusername,tmptoken)
+        if(tmpusername == "" || tmptoken == "")
+            return false
+        else
+            return new Auth(tmpusername,tmptoken)
     }
 
-    private getCookie(c_name) {
+    public static getCookie(c_name) {
         if (document.cookie.length > 0) {
             let c_start = document.cookie.indexOf(c_name + "=");
             if (c_start != -1) {
@@ -31,10 +43,6 @@ class Auth {
         }
         return "";
     }
-
-
-    @deserialize username: string;
-    @deserialize token: string;
 
 };
 

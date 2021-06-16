@@ -48,7 +48,7 @@
 
 
     const submit = async () => {
-        console.log(username, password)
+        // console.log(username, password)
 
         let res: Response = await fetch("/api/auth/login", {
             method: 'POST',
@@ -62,6 +62,9 @@
         if (res.status == 200) {
             const json = await res.json()
             let auth: Auth = Deserialize(json, Auth);
+            auth.setAuthCookie()
+            console.log("auth")
+            console.log(auth)
 
             authStore.update(curr => {
                 return auth;
