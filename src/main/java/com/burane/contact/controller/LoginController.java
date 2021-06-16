@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +25,6 @@ public class LoginController {
 	@Autowired private JwtTokenProvider jwtTokenProvider;
 	@Autowired private CustomUserDetailsService userService;
 	@Autowired private AuthenticationManager authenticationManager;
-
 
 	record AuthBody(String username, String password) {
 	}
@@ -40,7 +40,7 @@ public class LoginController {
 			model.put("token", token);
 			return ResponseEntity.ok(model);
 		} catch (AuthenticationException | NoSuchElementException e) {
-			model.put("message","Username or password incorrect");
+			model.put("message", "Username or password incorrect");
 			return ResponseEntity.badRequest().body(model);
 		}
 	}

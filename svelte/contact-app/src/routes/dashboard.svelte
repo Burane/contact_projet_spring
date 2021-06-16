@@ -8,7 +8,7 @@
 <div class="contact-list">
     {#each $contactStore as contact (contact._id)}
         <div>
-            <Contact {contact}/>
+            <ContactComponent {contact}/>
         </div>
     {/each}
 </div>
@@ -20,6 +20,8 @@
     import {onMount} from 'svelte';
     import Contact from "../objects/Contact";
     import {Deserialize} from "cerialize";
+    import ContactComponent from "../components/ContactComponent.svelte";
+
 
     onMount(async () => {
         const res = await fetch('/api/contact/all', {
