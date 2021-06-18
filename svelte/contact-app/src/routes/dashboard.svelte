@@ -63,7 +63,7 @@
 
 
 <script lang="ts">
-    import authStore from "../stores/userAuth";
+    import {authStore} from "../stores/userAuth";
     import contactStore from "../stores/contacts";
     import {onMount} from 'svelte';
     import Contact from "../objects/Contact";
@@ -72,6 +72,7 @@
 
 
     onMount(async () => {
+
         const res = await fetch('/api/contact/all', {
             method: 'post',
             headers: new Headers({
@@ -86,9 +87,6 @@
             return [curr, ...contact];
         })
     });
-
-    // JS
-
 
 
 </script>

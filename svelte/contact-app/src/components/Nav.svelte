@@ -13,9 +13,36 @@
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a class="nav-link" href="login">Log in</a></li>
-                <li class="nav-item"><a class="nav-link" href="register">sign up</a></li>
+                {#if !$authStore}
+                    <li class="nav-item"><a class="nav-link" href="login">Log in</a></li>
+                    <li class="nav-item"><a class="nav-link" href="register">sign up</a></li>
+                {:else}
+                    <li class="nav-item"><a class="nav-link" href="" on:click={logoutAndRedirect}>Log out</a></li>
+                    <li class="nav-item"><a class="nav-link">{$authStore.username}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="dashboard">Dashboard</a></li>
+
+                {/if}
             </ul>
         </div>
     </nav>
 </div>
+
+
+<script lang="ts">
+    import {onMount} from "svelte";
+    import {goto} from '$app/navigation';
+
+    let authStore
+    let logout
+    onMount(async () => {
+        const module = await import('../stores/userAuth');
+        authStore = module.authStore
+        logout = module.logout
+    });
+
+    async function logoutAndRedirect(){
+        await goto('/login')
+        logout()
+    }
+
+</script>

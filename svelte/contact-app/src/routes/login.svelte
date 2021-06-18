@@ -37,9 +37,7 @@
 
 <script lang="ts">
     import {goto} from '$app/navigation';
-    import authStore from '/src/stores/userAuth'
-    import Auth from "../objects/Auth";
-    import {Deserialize} from 'cerialize';
+    import {login} from '/src/stores/userAuth'
 
     let username: string
     let password: string
@@ -48,34 +46,15 @@
 
 
     const submit = async () => {
-        // console.log(username, password)
 
-        let res: Response = await fetch("/api/auth/login", {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                username,
-                password
-            })
-        })
-
-        if (res.status == 200) {
-            const json = await res.json()
-            let auth: Auth = Deserialize(json, Auth);
-            auth.setAuthCookie()
-            console.log("auth")
-            console.log(auth)
-
-            authStore.update(curr => {
-                return auth;
-            })
-
+        try {
+            await login(username, password)
             await goto('/dashboard')
-        } else {
-            error = true;
-            const json = await res.json()
-            message = json?.message
+        } catch (err) {
+            error = true
+            message = err
         }
+
 
     }
 </script>
