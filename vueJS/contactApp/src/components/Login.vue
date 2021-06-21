@@ -1,37 +1,37 @@
 <template>
-  <div class="col-md-12">
-    <div class="card card-container">
+  <!--  <div class="col-md-12">-->
+  <!--    <div class="card card-container">-->
 
-      <Form @submit="handleLogin" :validation-schema="schema">
-        <div class="form-group">
-          <label for="username">Username</label>
-          <Field name="username" id="username" type="text" class="form-control"/>
-          <ErrorMessage name="username" class="error-feedback"/>
-        </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <Field name="password" id="password" type="password" class="form-control"/>
-          <ErrorMessage name="password" class="error-feedback"/>
-        </div>
+  <!--      <Form @submit="handleLogin" :validation-schema="schema">-->
+  <!--        <div class="form-group">-->
+  <!--          <label for="username">Username</label>-->
+  <!--          <Field name="username" id="username" type="text" class="form-control"/>-->
+  <!--          <ErrorMessage name="username" class="error-feedback"/>-->
+  <!--        </div>-->
+  <!--        <div class="form-group">-->
+  <!--          <label for="password">Password</label>-->
+  <!--          <Field name="password" id="password" type="password" class="form-control"/>-->
+  <!--          <ErrorMessage name="password" class="error-feedback"/>-->
+  <!--        </div>-->
 
-        <div class="form-group">
-          <button class="btn btn-primary btn-block" :disabled="loading">
-            <span
-                v-show="loading"
-                class="spinner-border spinner-border-sm"
-            ></span>
-            <span>Login</span>
-          </button>
-        </div>
+  <!--        <div class="form-group">-->
+  <!--          <button class="btn btn-primary btn-block" :disabled="loading">-->
+  <!--            <span-->
+  <!--                v-show="loading"-->
+  <!--                class="spinner-border spinner-border-sm"-->
+  <!--            ></span>-->
+  <!--            <span>Login</span>-->
+  <!--          </button>-->
+  <!--        </div>-->
 
-        <div class="form-group">
-          <div v-if="message" class="alert alert-danger" role="alert">
-            {{ message }}
-          </div>
-        </div>
-      </Form>
-    </div>
-  </div>
+  <!--        <div class="form-group">-->
+  <!--          <div v-if="message" class="alert alert-danger" role="alert">-->
+  <!--            {{ message }}-->
+  <!--          </div>-->
+  <!--        </div>-->
+  <!--      </Form>-->
+  <!--    </div>-->
+  <!--  </div>-->
 
   <!--login-->
 
@@ -42,17 +42,16 @@
         <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
         <div class="form-floating">
-
+          <Field type="text" name="username" class="form-control" id="username"
+                 placeholder="Username"/>
           <label for="username">Username</label>
-          <input type="text" name="username" class="form-control" id="username"
-                 placeholder="Username">
           <ErrorMessage name="username" class="error-feedback"/>
         </div>
 
         <div class="form-floating">
+          <Field type="password" name="password" class="form-control" id="password"
+                 placeholder="Password"/>
           <label for="password">Password</label>
-          <input type="password" name="password" class="form-control" id="password"
-                 placeholder="Password">
           <ErrorMessage name="password" class="error-feedback"/>
 
         </div>
@@ -62,7 +61,7 @@
             <a href="register">Dont have an account yet ?</a>
           </label>
         </div>
-        <button class="btn btn-primary btn-block" :disabled="loading">
+        <button class="btn btn-primary btn-block" v-on:submit.prevent="handleLogin" :disabled="loading">
             <span
                 v-show="loading"
                 class="spinner-border spinner-border-sm"
