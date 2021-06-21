@@ -7,6 +7,7 @@
     let authStore
     let logout
     onMount(async () => {
+        console.log("onMount")
         const module = await import('../stores/userAuth');
         authStore = module.authStore
         logout = module.logout
@@ -15,7 +16,7 @@
 
     afterUpdate(() => {
         console.log("afterUpdate")
-        if (!$authStore && ['/login','/register','/'].find(val => val==window.location.pathname) === undefined){
+        if (!$authStore && ['/login','/register','/'].find(val => val==window.location.pathname) === undefined) {
             goto('/login')
         }
     });
