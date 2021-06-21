@@ -30,7 +30,8 @@ public class ContactController {
 	record emailBody(ObjectId _id, String email) {
 	}
 
-	record contactBody(ObjectId _id, User user, List<addressBody> address, List<emailBody> emails) {
+	record contactBody(ObjectId _id, String firstName, String lastName, User user, List<addressBody> address,
+					   List<emailBody> emails) {
 	}
 
 	@PostMapping("/all")
@@ -54,9 +55,10 @@ public class ContactController {
 	@PostMapping("/update")
 	public String addContact(@Valid @RequestBody contactBody contact) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		Contact update = new Contact(contact._id(), null, new ArrayList<>(contact.address().stream()
-				.map(addressBody -> new Address(addressBody._id(), addressBody.postalCode(), addressBody.city(),
-						addressBody.street())).toList()), new ArrayList<>(
+		Contact update = new Contact(contact._id(), contact.firstName, contact.lastName, null, new ArrayList<>(
+				contact.address().stream()
+						.map(addressBody -> new Address(addressBody._id(), addressBody.postalCode(), addressBody.city(),
+								addressBody.street())).toList()), new ArrayList<>(
 				contact.emails().stream().map(emailBody -> new Email(emailBody._id(), emailBody.email())).toList()));
 		try {
 			customUserContactsService.saveOrUpdateContact(update, username);

@@ -21,6 +21,10 @@ public class Contact {
 	@Id
 	private ObjectId _id;
 
+	private String firstName;
+
+	private String lastName;
+
 	@JsonIgnore
 	@DBRef
 	private User user;

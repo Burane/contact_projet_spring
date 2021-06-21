@@ -8,7 +8,9 @@
 
 <!-- ////////////////////////  -->
 <div>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Ajouter contact</button>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+            data-bs-whatever="@mdo">Ajouter contact
+    </button>
 </div>
 
 <!-- MODAL  -->
@@ -53,13 +55,14 @@
 <!-- END MODAL -->
 
 <div class="contact-list">
-    {#each $contactStore as contact (contact._id)}
-        <div>
-            <ContactComponent contact={contact}/>
-        </div>
+    {#each $contactStore as contact }
+        {#if contact._id}
+            <div>
+                <ContactComponent contact={contact}/>
+            </div>
+        {/if}
     {/each}
 </div>
-
 
 
 <script lang="ts">
@@ -77,7 +80,7 @@
             method: 'post',
             headers: new Headers({
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer '+$authStore.token
+                'Authorization': 'Bearer ' + $authStore.token
             })
         });
         const json = await res.json();
