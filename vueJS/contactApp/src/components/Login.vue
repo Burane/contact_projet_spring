@@ -1,39 +1,4 @@
 <template>
-  <!--  <div class="col-md-12">-->
-  <!--    <div class="card card-container">-->
-
-  <!--      <Form @submit="handleLogin" :validation-schema="schema">-->
-  <!--        <div class="form-group">-->
-  <!--          <label for="username">Username</label>-->
-  <!--          <Field name="username" id="username" type="text" class="form-control"/>-->
-  <!--          <ErrorMessage name="username" class="error-feedback"/>-->
-  <!--        </div>-->
-  <!--        <div class="form-group">-->
-  <!--          <label for="password">Password</label>-->
-  <!--          <Field name="password" id="password" type="password" class="form-control"/>-->
-  <!--          <ErrorMessage name="password" class="error-feedback"/>-->
-  <!--        </div>-->
-
-  <!--        <div class="form-group">-->
-  <!--          <button class="btn btn-primary btn-block" :disabled="loading">-->
-  <!--            <span-->
-  <!--                v-show="loading"-->
-  <!--                class="spinner-border spinner-border-sm"-->
-  <!--            ></span>-->
-  <!--            <span>Login</span>-->
-  <!--          </button>-->
-  <!--        </div>-->
-
-  <!--        <div class="form-group">-->
-  <!--          <div v-if="message" class="alert alert-danger" role="alert">-->
-  <!--            {{ message }}-->
-  <!--          </div>-->
-  <!--        </div>-->
-  <!--      </Form>-->
-  <!--    </div>-->
-  <!--  </div>-->
-
-  <!--login-->
 
   <div class="text-center">
     <main class="form-signin">
@@ -58,9 +23,10 @@
 
         <div class="checkbox mb-3">
           <label>
-            <a href="register">Dont have an account yet ?</a>
+            <router-link to="/register">Dont have an account yet ?</router-link>
           </label>
         </div>
+
         <button class="btn btn-primary btn-block" v-on:submit.prevent="handleLogin" :disabled="loading">
             <span
                 v-show="loading"
@@ -68,6 +34,7 @@
             ></span>
           <span>Login</span>
         </button>
+
         <div v-if="message" class="alert alert-danger" role="alert">
           {{ message }}
         </div>
@@ -75,6 +42,7 @@
       </Form>
     </main>
   </div>
+
 </template>
 
 <script>
@@ -131,8 +99,8 @@ export default {
     },
   },
 };
-</script>
 
+</script>
 
 <style scoped>
 html,

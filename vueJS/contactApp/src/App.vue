@@ -40,10 +40,10 @@
           </router-link>
         </li>
         <li class="nav-item">
-          <a class="nav-link" @click.prevent="logOut">
-            <font-awesome-icon icon="sign-out-alt"/>
-            LogOut
-          </a>
+            <a class="nav-link" @click.prevent="logOut">
+              <font-awesome-icon icon="sign-out-alt"/>
+              LogOut
+            </a>
         </li>
       </div>
     </nav>
@@ -69,3 +69,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.nav-link {
+  cursor: pointer;
+}
+</style>

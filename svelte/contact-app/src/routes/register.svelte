@@ -27,7 +27,7 @@
 
             <div class="checkbox mb-3">
                 <label>
-                    <a href="login">Already have an account ?</a>
+                    <router-link to="/register">Already have an account ?</router-link>
                 </label>
             </div>
             <button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>

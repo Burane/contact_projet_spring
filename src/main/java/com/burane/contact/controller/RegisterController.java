@@ -26,12 +26,12 @@ public class RegisterController {
 		Map<String, String> model = new HashMap<>();
 
 		if (user.getUsername().isBlank()) {
-			model.put("message", "Username canot be blank");
+			model.put("message", "Username cannot be blank");
 			return ResponseEntity.badRequest().body(model);
 		}
 
 		if (user.getPassword().isBlank()) {
-			model.put("message", "Password canot be blank");
+			model.put("message", "Password cannot be blank");
 			return ResponseEntity.badRequest().body(model);
 		}
 

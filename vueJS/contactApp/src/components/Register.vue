@@ -1,49 +1,45 @@
 <template>
-  <div class="col-md-12">
-    <div class="card card-container">
-      <img
-          id="profile-img"
-          src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-          class="profile-img-card"
-      />
+  <div class="text-center">
+    <main class="form-signin">
       <Form @submit="handleRegister" :validation-schema="schema">
-        <div v-if="!successful">
-          <div class="form-group">
-            <label for="username">Username</label>
-            <Field name="username" type="text" class="form-control" />
-            <ErrorMessage name="username" class="error-feedback" />
-          </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <Field name="email" type="email" class="form-control" />
-            <ErrorMessage name="email" class="error-feedback" />
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <Field name="password" type="password" class="form-control" />
-            <ErrorMessage name="password" class="error-feedback" />
-          </div>
+        <img class="mb-4" src="../assets/images/userLogo.png" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
 
-          <div class="form-group">
-            <button class="btn btn-primary btn-block" :disabled="loading">
-              <span
-                  v-show="loading"
-                  class="spinner-border spinner-border-sm"
-              ></span>
-              Sign Up
-            </button>
-          </div>
+        <div class="form-floating">
+          <Field type="text" name="username" class="form-control" id="username"
+                 placeholder="Username"/>
+          <label for="username">Username</label>
+          <ErrorMessage name="username" class="error-feedback"/>
         </div>
-      </Form>
 
-      <div
-          v-if="message"
-          class="alert"
-          :class="successful ? 'alert-success' : 'alert-danger'"
-      >
-        {{ message }}
-      </div>
-    </div>
+        <div class="form-floating">
+          <Field type="password" name="password" class="form-control" id="password"
+                 placeholder="Password"/>
+          <label for="password">Password</label>
+          <ErrorMessage name="password" class="error-feedback"/>
+
+        </div>
+
+        <div class="checkbox mb-3">
+          <label>
+            <router-link to="/login">Already have an account ?</router-link>
+          </label>
+        </div>
+
+        <button class="btn btn-primary btn-block" v-on:submit.prevent="handleRegister" :disabled="loading">
+            <span
+                v-show="loading"
+                class="spinner-border spinner-border-sm"
+            ></span>
+          <span>Sign up</span>
+        </button>
+
+        <div v-if="message" class="alert alert-danger" role="alert">
+          {{ message }}
+        </div>
+        <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
+      </Form>
+    </main>
   </div>
 </template>
 
@@ -65,11 +61,6 @@ export default {
           .required("Username is required!")
           .min(3, "Must be at least 3 characters!")
           .max(20, "Must be maximum 20 characters!"),
-      email: yup
-          .string()
-          .required("Email is required!")
-          .email("Email is invalid!")
-          .max(50, "Must be maximum 50 characters!"),
       password: yup
           .string()
           .required("Password is required!")
@@ -96,15 +87,14 @@ export default {
   },
   methods: {
     handleRegister(user) {
+      console.log(user)
       this.message = "";
       this.successful = false;
       this.loading = true;
 
       this.$store.dispatch("auth/register", user).then(
-          (data) => {
-            this.message = data.message;
-            this.successful = true;
-            this.loading = false;
+          () => {
+            this.$router.push("/login");
           },
           (error) => {
             this.message =
@@ -122,5 +112,46 @@ export default {
 };
 </script>
 
+
+
 <style scoped>
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #f5f5f5;
+}
+
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+}
+
+.form-signin .checkbox {
+  font-weight: 400;
+}
+
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
 </style>
