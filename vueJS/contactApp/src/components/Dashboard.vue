@@ -1,4 +1,6 @@
 <template>
+
+  <AddContact></AddContact>
   <div class="card" v-for="contact in content">
     <div class="card-header">
       Contact :
@@ -18,10 +20,11 @@
 import UserService from "../services/user.service";
 import Emails from "./Emails.vue";
 import Address from "./Address.vue";
+import AddContact from "./AddContact.vue";
 
 export default {
   name: "Dashboard",
-  components: {Address, Emails},
+  components: {AddContact, Address, Emails},
   data() {
     return {
       content: [],
@@ -34,8 +37,9 @@ export default {
     deleteContact(contact) {
         console.log(contact)
         UserService.deleteContact(contact).then(response => {
-          alert(response)
+          console.log(response)
         })
+      this.getContact()
     },
     getContact() {
       UserService.getContact().then((response) => {

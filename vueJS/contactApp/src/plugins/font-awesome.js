@@ -9,8 +9,10 @@ import {
     faAddressCard,
     faTrashAlt,
     faEdit,
+    faPlus,
+
 } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt, faAddressCard, faTrashAlt, faEdit);
+library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt, faAddressCard, faTrashAlt, faEdit, faPlus);
 
 export { FontAwesomeIcon };
