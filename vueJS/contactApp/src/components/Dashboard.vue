@@ -2,12 +2,14 @@
   <div class="card" v-for="contact in content">
     <div class="card-header">
       Contact :
+      <font-awesome-icon @click="deleteContact(contact)" class="float-end delete" icon="trash-alt"/>
+      <font-awesome-icon class="float-end edit" icon="edit" />
     </div>
     <div class="card-body">
       <h5 class="card-title"> {{ contact.firstName }} {{ contact.lastName }}</h5>
       <div></div>
-        <Emails v-bind:emails="contact.emails"></Emails>
-      <Address v-bind:address="contact.address"></Address>
+      <Emails :infos="{id: contact._id+'_mail', emails : contact.emails}"></Emails>
+      <Address :infos="{id: contact._id+'_addr', address : contact.address}"></Address>
     </div>
   </div>
 </template>
@@ -26,18 +28,48 @@ export default {
     };
   },
   mounted() {
-    UserService.getContact().then((response) => {
-          this.content = response.data;
-        },
-        (error) => {
-          this.content =
-              (error.response &&
-                  error.response.data &&
-                  error.response.data.message) ||
-              error.message ||
-              error.toString();
-        }
-    );
+    this.getContact()
   },
+  methods : {
+    deleteContact(contact) {
+        console.log(contact)
+        UserService.deleteContact(contact).then(response => {
+          alert(response)
+        })
+    },
+    getContact() {
+      UserService.getContact().then((response) => {
+            this.content = response.data;
+          },
+          (error) => {
+            this.content =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+          }
+      );
+    }
+  }
 };
 </script>
+
+<style scoped>
+
+.delete, .edit {
+  margin: 5px;
+  cursor: pointer;
+}
+
+.delete:hover {
+  color: red;
+  transition-duration: 150ms;
+}
+
+.edit:hover {
+  color: orange;
+  transition-duration: 150ms;
+}
+
+</style>
