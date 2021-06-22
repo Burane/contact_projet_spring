@@ -20,6 +20,17 @@
                    :value="ctc.firstName">
           </div>
 
+
+          <div class="input-group mt-5 mb-3 d-flex justify-content-center">
+            <button @click="removeMail" class="btn btn-danger" type="button">
+              <font-awesome-icon icon="minus"></font-awesome-icon>
+            </button>
+            <span class="input-group-text"><strong>Email</strong></span>
+            <button @click="addMail" class="btn btn-success" type="button">
+              <font-awesome-icon icon="plus"></font-awesome-icon>
+            </button>
+          </div>
+
           <template v-for="email in ctc.emails">
             <div class="input-group mb-3">
               <span class="input-group-text"><font-awesome-icon icon="envelope"></font-awesome-icon></span>
@@ -27,16 +38,27 @@
             </div>
           </template>
 
+          <div class="input-group mt-5 mb-3 d-flex justify-content-center">
+            <button @click="removeAddr" class="btn btn-danger" type="button">
+              <font-awesome-icon icon="minus"></font-awesome-icon>
+            </button>
+            <span class="input-group-text"><strong>Adresse</strong></span>
+            <button @click="addAddr" class="btn btn-success" type="button">
+              <font-awesome-icon icon="plus"></font-awesome-icon>
+            </button>
+          </div>
 
           <template v-for="addr in ctc.address">
             <div class="input-group mb-3">
               <span class="input-group-text"><font-awesome-icon
                   icon="envelope"></font-awesome-icon></span>
-              <input type="text" class="form-control col-6" placeholder="Adresse" aria-label="street"
-                     :value="addr.street">
-              <input type="text" class="form-control" placeholder="Code postal" aria-label="postalCode"
-                     :value="addr.postalCode">
-              <input type="text" class="form-control" placeholder="Ville" aria-label="city" :value="addr.city">
+
+              <input type="text" v-model="addr.street" class="form-control col-6" placeholder="Adresse"
+                     aria-label="street">
+              <input type="text" v-model="addr.postalCode" class="form-control" placeholder="Code postal"
+                     aria-label="postalCode">
+              <input type="text" v-model="addr.city" class="form-control" placeholder="Ville" aria-label="city">
+
             </div>
           </template>
 
@@ -61,22 +83,28 @@ export default {
   name: "AddOrModifyModal",
   props: ['contact'],
   computed: {
-    ctc() {
-      return this.contact || {
-        firstName: "",
-        lastName: "",
-        address: [
-          {
-            postalCode: "",
-            city: "",
-            street: ""
-          }
-        ],
-        emails: [
-          {
-            email: ""
-          }
-        ]
+    ctc: {
+      get: function () {
+        return this.contact || {
+          firstName: "",
+          lastName: "",
+          address: [
+            {
+              postalCode: "",
+              city: "",
+              street: ""
+            }
+          ],
+          emails: [
+            {
+              email: ""
+            }
+          ]
+        }
+      },
+      set: function (newValue) {
+        console.log(newValue)
+        this.contact = newValue
       }
     }
   },
@@ -86,12 +114,25 @@ export default {
       let myModal = new Modal(modalDom)
       myModal.show()
     },
-    test() {
+    addAddr() {
       this.ctc.address.push({
         postalCode: "",
         city: "",
         street: ""
       })
+    },
+    removeAddr() {
+      if (this.ctc.address.length > 1)
+        this.ctc.address.pop()
+    },
+    addMail() {
+      this.ctc.emails.push({
+        email: "",
+      })
+    },
+    removeMail() {
+      if (this.ctc.emails.length > 1)
+        this.ctc.emails.pop()
     }
   }
 }

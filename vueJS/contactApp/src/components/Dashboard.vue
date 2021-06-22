@@ -1,7 +1,7 @@
 <template>
 
   <div class="d-flex justify-content-center">
-    <button class="btn btn-circle btn-xl btn-primary" @click="updateModal(null)">
+    <button class="btn btn-circle btn-xl btn-primary" @click="updateModal(emptyContact)">
       <font-awesome-icon icon="plus"></font-awesome-icon>
     </button>
   </div>
@@ -39,7 +39,23 @@ export default {
   data() {
     return {
       content: [],
-      currentContact: {}
+      currentContact: {},
+      emptyContact : {
+        firstName: "",
+        lastName: "",
+        address: [
+          {
+            postalCode: "",
+            city: "",
+            street: ""
+          }
+        ],
+        emails: [
+          {
+            email: ""
+          }
+        ]
+      },
     };
   },
   mounted() {
