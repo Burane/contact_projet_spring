@@ -49,8 +49,12 @@ public class CustomUserContactsService {
 	public void saveOrUpdateContact(Contact contact, String username) throws EmailAlreadyExistException {
 		User user = userDetailsService.findByUsername(username);
 		contact.setUser(user);
-		if (contact.getEmails().stream().anyMatch(email -> emailRepository.existsByEmail(email.getEmail())))
+		if (contact.getEmails().stream().anyMatch(
+				email -> emailRepository.existsByEmail(email.getEmail()) &&
+						findById(contact.get_id()).getEmails().stream()
+						.noneMatch(email1 -> contact.getEmails().stream().anyMatch(email2 -> email2 == email1)))) {
 			throw new EmailAlreadyExistException("An email is already taken");
+		}
 		emailRepository.saveAll(contact.getEmails());
 		addressRepository.saveAll(contact.getAddress());
 		contactRepository.save(contact);

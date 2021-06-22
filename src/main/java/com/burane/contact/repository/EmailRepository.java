@@ -6,5 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface EmailRepository extends MongoRepository<Email, String> {
 
 	boolean existsByEmail(String email);
+	boolean existsByEmailAndEmailIsNotIn(String email, String[] emailsIsNotIn);
 
 }

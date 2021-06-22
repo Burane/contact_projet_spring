@@ -15,9 +15,9 @@
 
           <div class="input-group mb-3">
             <span class="input-group-text"><font-awesome-icon icon="user"></font-awesome-icon></span>
-            <input type="text" class="form-control" placeholder="Nom" aria-label="lastName" :value="ctc.lastName">
+            <input type="text" class="form-control" placeholder="Nom" aria-label="lastName" v-model="tempContact.lastName">
             <input type="text" class="form-control" placeholder="Prénom" aria-label="firstName"
-                   :value="ctc.firstName">
+                   v-model="tempContact.firstName">
           </div>
 
 
@@ -31,10 +31,10 @@
             </button>
           </div>
 
-          <template v-for="email in ctc.emails">
+          <template v-for="email in tempContact.emails">
             <div class="input-group mb-3">
               <span class="input-group-text"><font-awesome-icon icon="envelope"></font-awesome-icon></span>
-              <input type="text" class="form-control" placeholder="Email" aria-label="email" :value="email.email">
+              <input type="text" v-model="email.email" class="form-control" placeholder="Email" aria-label="email">
             </div>
           </template>
 
@@ -48,7 +48,7 @@
             </button>
           </div>
 
-          <template v-for="addr in ctc.address">
+          <template v-for="addr in tempContact.address">
             <div class="input-group mb-3">
               <span class="input-group-text"><font-awesome-icon
                   icon="envelope"></font-awesome-icon></span>
@@ -66,7 +66,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary">Sauvegarder</button>
+          <button type="button" @click="saveChanges" class="btn btn-primary">Sauvegarder</button>
         </div>
       </div>
     </div>
@@ -82,30 +82,9 @@ export default {
 
   name: "AddOrModifyModal",
   props: ['contact'],
-  computed: {
-    ctc: {
-      get: function () {
-        return this.contact || {
-          firstName: "",
-          lastName: "",
-          address: [
-            {
-              postalCode: "",
-              city: "",
-              street: ""
-            }
-          ],
-          emails: [
-            {
-              email: ""
-            }
-          ]
-        }
-      },
-      set: function (newValue) {
-        console.log(newValue)
-        this.contact = newValue
-      }
+  data() {
+    return {
+      tempContact: {}
     }
   },
   methods: {
@@ -115,24 +94,30 @@ export default {
       myModal.show()
     },
     addAddr() {
-      this.ctc.address.push({
+      this.tempContact.address.push({
         postalCode: "",
         city: "",
         street: ""
       })
     },
     removeAddr() {
-      if (this.ctc.address.length > 1)
-        this.ctc.address.pop()
+      if (this.tempContact.address.length > 1)
+        this.tempContact.address.pop()
     },
     addMail() {
-      this.ctc.emails.push({
+      this.tempContact.emails.push({
         email: "",
       })
     },
     removeMail() {
-      if (this.ctc.emails.length > 1)
-        this.ctc.emails.pop()
+      if (this.tempContact.emails.length > 1)
+        this.tempContact.emails.pop()
+    },
+    saveChanges(){
+      let modalDom = document.getElementById('addModal')
+      let myModal = Modal.getInstance(modalDom)
+      myModal.hide()
+      this.$emit('contactModified',this.tempContact)
     }
   }
 }

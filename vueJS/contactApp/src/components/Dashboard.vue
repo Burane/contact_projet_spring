@@ -6,7 +6,8 @@
     </button>
   </div>
 
-  <AddOrModifyModal :contact="currentContact" ref="addOrModifyModal"></AddOrModifyModal>
+  <AddOrModifyModal :contact="currentContact" v-on:contactModified="saveContact"
+                    ref="addOrModifyModal"></AddOrModifyModal>
 
   <div class="card" v-for="contact in content">
     <div class="card-header">
@@ -40,7 +41,7 @@ export default {
     return {
       content: [],
       currentContact: {},
-      emptyContact : {
+      emptyContact: {
         firstName: "",
         lastName: "",
         address: [
@@ -74,12 +75,7 @@ export default {
             this.content = response.data;
           },
           (error) => {
-            this.content =
-                (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
-                error.toString();
+            alert(error.response && error.response.data && error.response.data.message) || error.message || error.toString();
           }
       );
     },
@@ -92,6 +88,42 @@ export default {
     },
     showModal() {
       this.$refs.addOrModifyModal.showModal()
+      this.$refs.addOrModifyModal.$data.tempContact = JSON.parse(JSON.stringify(this.currentContact));
+    },
+    saveContact(contact) {
+      if (this.currentContact == this.emptyContact) {
+        console.log("add")
+        UserService.saveContact(contact).then((response) => {
+              console.log(response.data);
+            },
+            (error) => {
+              alert(error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+            }
+        );
+      } else {
+        console.log("modify")
+
+
+        let uniquesMails = []
+
+        contact.emails.forEach(email => {
+          if(!uniquesMails.some(mail => mail.email === email.email))
+            uniquesMails.push(email)
+        })
+
+
+        contact.emails = uniquesMails
+
+        UserService.updateContact(contact).then((response) => {
+              console.log(response.data);
+            },
+            (error) => {
+              console.log(error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+            }
+        );
+
+      }
+      this.getContact()
     }
   }
 };

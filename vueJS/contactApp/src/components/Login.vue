@@ -84,7 +84,7 @@ export default {
 
       this.$store.dispatch("auth/login", user).then(
           () => {
-            this.$router.push("/profile");
+            this.$router.push("/dashboard");
           },
           (error) => {
             this.loading = false;
