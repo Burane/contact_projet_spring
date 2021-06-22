@@ -3,7 +3,7 @@
 
   <!-- Modal -->
   <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addOrModifyModal" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="addOrModifyModal">Ajouter un contact</h5>
@@ -15,15 +15,28 @@
 
           <div class="input-group mb-3">
             <span class="input-group-text"><font-awesome-icon icon="user"></font-awesome-icon></span>
-            <input type="text" class="form-control" placeholder="Nom" aria-label="lastName" :value="contact.lastName">
+            <input type="text" class="form-control" placeholder="Nom" aria-label="lastName" :value="ctc.lastName">
             <input type="text" class="form-control" placeholder="Prénom" aria-label="firstName"
-                   :value="contact.firstName">
+                   :value="ctc.firstName">
           </div>
 
-          <template v-for="email in contact.emails">
+          <template v-for="email in ctc.emails">
             <div class="input-group mb-3">
               <span class="input-group-text"><font-awesome-icon icon="envelope"></font-awesome-icon></span>
-              <input type="text" class="form-control" placeholder="Email" aria-label="email" :value="contact.lastName">
+              <input type="text" class="form-control" placeholder="Email" aria-label="email" :value="email.email">
+            </div>
+          </template>
+
+
+          <template v-for="addr in ctc.address">
+            <div class="input-group mb-3">
+              <span class="input-group-text"><font-awesome-icon
+                  icon="envelope"></font-awesome-icon></span>
+              <input type="text" class="form-control col-6" placeholder="Adresse" aria-label="street"
+                     :value="addr.street">
+              <input type="text" class="form-control" placeholder="Code postal" aria-label="postalCode"
+                     :value="addr.postalCode">
+              <input type="text" class="form-control" placeholder="Ville" aria-label="city" :value="addr.city">
             </div>
           </template>
 
@@ -47,34 +60,38 @@ export default {
 
   name: "AddOrModifyModal",
   props: ['contact'],
-  // data() {
-  //   return {
-  //     contact: this.contact || {
-  //       firstName: "",
-  //       lastName: "",
-  //       address: [
-  //         {
-  //           postalCode: "",
-  //           city: "",
-  //           street: ""
-  //         }
-  //       ],
-  //       emails: [
-  //         {
-  //           email: ""
-  //         }
-  //       ]
-  //     }
-  //   }
-  // },
+  computed: {
+    ctc() {
+      return this.contact || {
+        firstName: "",
+        lastName: "",
+        address: [
+          {
+            postalCode: "",
+            city: "",
+            street: ""
+          }
+        ],
+        emails: [
+          {
+            email: ""
+          }
+        ]
+      }
+    }
+  },
   methods: {
-    showOrHideModal() {
+    showModal() {
       let modalDom = document.getElementById('addModal')
       let myModal = new Modal(modalDom)
-      if (modalDom.classList.contains('show'))
-        myModal.hide()
-      else
-        myModal.show()
+      myModal.show()
+    },
+    test() {
+      this.ctc.address.push({
+        postalCode: "",
+        city: "",
+        street: ""
+      })
     }
   }
 }

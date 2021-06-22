@@ -1,7 +1,7 @@
 <template>
 
   <div class="d-flex justify-content-center">
-    <button class="btn btn-circle btn-xl btn-primary" @click="updateModal" >
+    <button class="btn btn-circle btn-xl btn-primary" @click="updateModal(null)">
       <font-awesome-icon icon="plus"></font-awesome-icon>
     </button>
   </div>
@@ -11,8 +11,12 @@
   <div class="card" v-for="contact in content">
     <div class="card-header">
       Contact :
-      <font-awesome-icon @click="deleteContact(contact)" class="float-end delete" icon="trash-alt"/>
-      <font-awesome-icon @click="updateModal(contact)" class="float-end edit" icon="edit" />
+      <a @click.prevent="deleteContact(contact)">
+        <font-awesome-icon class="float-end delete" icon="trash-alt"/>
+      </a>
+      <a @click.prevent="updateModal(contact)">
+        <font-awesome-icon class="float-end edit" icon="edit"/>
+      </a>
     </div>
     <div class="card-body">
       <h5 class="card-title"> {{ contact.firstName }} {{ contact.lastName }}</h5>
@@ -41,12 +45,12 @@ export default {
   mounted() {
     this.getContact()
   },
-  methods : {
+  methods: {
     deleteContact(contact) {
-        console.log(contact)
-        UserService.deleteContact(contact).then(response => {
-          console.log(response)
-        })
+      console.log(contact)
+      UserService.deleteContact(contact).then(response => {
+        console.log(response)
+      })
       this.getContact()
     },
     getContact() {
@@ -63,15 +67,15 @@ export default {
           }
       );
     },
-    updateModal(contact){
+    updateModal(contact) {
       this.changeCurrentContact(contact)
-      this.showOrHideModal()
+      this.showModal()
     },
     changeCurrentContact(contact) {
       this.currentContact = contact
     },
-    showOrHideModal() {
-      this.$refs.addOrModifyModal.showOrHideModal()
+    showModal() {
+      this.$refs.addOrModifyModal.showModal()
     }
   }
 };
