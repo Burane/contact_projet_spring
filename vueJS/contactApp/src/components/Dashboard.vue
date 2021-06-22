@@ -1,11 +1,18 @@
 <template>
 
-  <AddContact></AddContact>
+  <div class="d-flex justify-content-center">
+    <button class="btn btn-circle btn-xl btn-primary" @click="updateModal" >
+      <font-awesome-icon icon="plus"></font-awesome-icon>
+    </button>
+  </div>
+
+  <AddOrModifyModal :contact="currentContact" ref="addOrModifyModal"></AddOrModifyModal>
+
   <div class="card" v-for="contact in content">
     <div class="card-header">
       Contact :
       <font-awesome-icon @click="deleteContact(contact)" class="float-end delete" icon="trash-alt"/>
-      <font-awesome-icon class="float-end edit" icon="edit" />
+      <font-awesome-icon @click="updateModal(contact)" class="float-end edit" icon="edit" />
     </div>
     <div class="card-body">
       <h5 class="card-title"> {{ contact.firstName }} {{ contact.lastName }}</h5>
@@ -20,14 +27,15 @@
 import UserService from "../services/user.service";
 import Emails from "./Emails.vue";
 import Address from "./Address.vue";
-import AddContact from "./AddContact.vue";
+import AddOrModifyModal from "./AddOrModifyModal.vue";
 
 export default {
   name: "Dashboard",
-  components: {AddContact, Address, Emails},
+  components: {AddOrModifyModal, Address, Emails},
   data() {
     return {
       content: [],
+      currentContact: {}
     };
   },
   mounted() {
@@ -54,6 +62,16 @@ export default {
                 error.toString();
           }
       );
+    },
+    updateModal(contact){
+      this.changeCurrentContact(contact)
+      this.showOrHideModal()
+    },
+    changeCurrentContact(contact) {
+      this.currentContact = contact
+    },
+    showOrHideModal() {
+      this.$refs.addOrModifyModal.showOrHideModal()
     }
   }
 };
@@ -76,4 +94,26 @@ export default {
   transition-duration: 150ms;
 }
 
+button {
+  margin: 1em;
+}
+
+.btn-circle.btn-xl {
+  width: 70px;
+  height: 70px;
+  padding: 10px 16px;
+  border-radius: 35px;
+  font-size: 24px;
+  line-height: 1.33;
+}
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  padding: 6px 0px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.42857;
+}
 </style>
