@@ -1,5 +1,10 @@
 # contact_projet_spring
 
+
+Lancer le projet :
+
+gradle boot
+
 Deux moyens :
 gradle boot run pour lancer 
    dans le repertoire contactApp
